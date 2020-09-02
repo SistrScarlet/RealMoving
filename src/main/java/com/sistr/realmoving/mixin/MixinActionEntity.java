@@ -11,8 +11,8 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,7 +53,7 @@ public abstract class MixinActionEntity extends LivingEntity implements IActiona
     @Inject(at = @At("RETURN"), method = "tick")
     public void postTick(CallbackInfo ci) {
         if (isSliding()) {
-            Vec3d motion = getMotion();
+            Vector3d motion = getMotion();
             motion = motion.normalize().scale((1F - (slideTime / 20F) * (slideTime / 20F)) * 0.2F);
             setMotion(getMotion().scale(0.6D).add(motion));
             if (20 < ++slideTime) {
@@ -153,7 +153,7 @@ public abstract class MixinActionEntity extends LivingEntity implements IActiona
     }
 
     public BlockPos getBaseClimbBlock() {
-        Vec3d look = this.getVectorForRotation(0, this.rotationYaw);
+        Vector3d look = this.getVectorForRotation(0, this.rotationYaw);
         return new BlockPos(getPositionVec().add(look.scale(0.5D)));
     }
 
