@@ -54,8 +54,9 @@ public abstract class MixinActionEntity extends LivingEntity implements IActiona
     public void postTick(CallbackInfo ci) {
         if (isSliding()) {
             Vector3d motion = getMotion();
-            motion = motion.normalize().scale((1F - (slideTime / 20F) * (slideTime / 20F)) * 0.2F);
-            setMotion(getMotion().scale(0.6D).add(motion));
+            motion = motion.subtract(0, motion.getY(), 0).normalize()
+                    .scale((1F - (slideTime / 20F) * (slideTime / 20F)) * 0.2F);
+            setMotion(getMotion().mul(0.6D, 1D, 0.6D).add(motion));
             if (20 < ++slideTime) {
                 setSprinting(false);
             }
@@ -99,7 +100,7 @@ public abstract class MixinActionEntity extends LivingEntity implements IActiona
     public void updateClimbing() {
         climbHeightCache = -1;
         //伏せを優先するため、着地かつスニーク中は発動しない
-        if (!(onGround && isSneaking()) && !isPassenger() && !isInWater() && isActioning()) {
+        if (!(onGround && isSneaking() && !isCrawling()) && !isPassenger() && !isInWater() && isActioning()) {
             float climbHeight = getClimbHeight();
             boolean climbing = stepHeight < climbHeight || (isClimbing() && 0 < climbHeight);
             setClimbing(climbing);

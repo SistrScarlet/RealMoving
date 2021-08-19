@@ -45,7 +45,7 @@ public abstract class MixinClientActionEntity extends MixinActionEntity {
 
     @Inject(at = @At("RETURN"), method = "isCrouching", cancellable = true)
     public void onIsCrouching(CallbackInfoReturnable<Boolean> cir) {
-        if (isCrawling()) {
+        if (isCrawling() || isClimbing()) {
             cir.setReturnValue(false);
         }
     }
